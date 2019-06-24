@@ -107,14 +107,14 @@ extension DataRequest {
             request, response, data, error in
             
             let JSONObject = processResponse(request: request, response: response, data: data, keyPath: keyPath)
-            
-            if let JSONObject = JSONObject,
-                let parsedObject = (try? Mapper<T>(context: context, shouldIncludeNilValues: false).map(JSONObject: JSONObject)){
-                return parsedObject
-            } else {
-                let failureReason = "ObjectMapper failed to serialize response."
-                throw AFError.responseSerializationFailed(reason: .decodingFailed(error: newError(.dataSerializationFailed, failureReason: failureReason)))
+            if let JSONObject = JSONObject {
+                do {
+                    let parsedObject = try Mapper<T>(context: context, shouldIncludeNilValues: false).map(JSONObject: JSONObject)
+                    return parsedObject
+                } catch {}
             }
+            let failureReason = "ObjectMapper failed to serialize response."
+            throw AFError.responseSerializationFailed(reason: .decodingFailed(error: newError(.dataSerializationFailed, failureReason: failureReason)))
         })
     }
     
@@ -164,12 +164,11 @@ extension DataRequest {
             request, response, data, error in
             
             if let JSONObject = processResponse(request: request, response: response, data: data, keyPath: keyPath){
-                
-                if let parsedObject = try? Mapper<T>(context: context, shouldIncludeNilValues: false).mapArray(JSONObject: JSONObject){
+                do {
+                    let parsedObject = try Mapper<T>(context: context, shouldIncludeNilValues: false).mapArray(JSONObject: JSONObject)
                     return parsedObject
-                }
+                } catch { }
             }
-            
             let failureReason = "ObjectMapper failed to serialize response."
             throw AFError.responseSerializationFailed(reason: .decodingFailed(error: newError(.dataSerializationFailed, failureReason: failureReason)))
         })
