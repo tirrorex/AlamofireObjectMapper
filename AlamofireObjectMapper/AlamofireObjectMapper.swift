@@ -84,7 +84,7 @@ extension DataRequest {
         
         return MappableResponseSerializer(keyPath, mapToObject: object, context: context, serializeCallback: {
             request, response, data, error in
-
+            
             let JSONObject = processResponse(request: request, response: response, data: data, keyPath: keyPath)
             
             if let object = object {
@@ -161,7 +161,7 @@ extension DataRequest {
     /// ImmutableMappable Array Serializer
     public static func ObjectMapperImmutableArraySerializer<T: ImmutableMappable>(_ keyPath: String?, context: MapContext? = nil) -> MappableArrayResponseSerializer<T> {
         return MappableArrayResponseSerializer(keyPath, context: context, serializeCallback: {
-             request, response, data, error in
+            request, response, data, error in
             
             if let JSONObject = processResponse(request: request, response: response, data: data, keyPath: keyPath){
                 
@@ -215,9 +215,9 @@ public final class MappableResponseSerializer<T: BaseMappable>: ResponseSerializ
     public let keyPath: String?
     public let context: MapContext?
     public let object: T?
-
+    
     public let serializeCallback: (URLRequest?,HTTPURLResponse?, Data?,Error?) throws -> T
-
+    
     /// Creates an instance using the values provided.
     ///
     /// - Parameters:
@@ -227,11 +227,11 @@ public final class MappableResponseSerializer<T: BaseMappable>: ResponseSerializ
     ///   - emptyResponseCodes:  The HTTP response codes for which empty responses are allowed. Defaults to
     ///                          `[204, 205]`.
     ///   - emptyRequestMethods: The HTTP request methods for which empty responses are allowed. Defaults to `[.head]`.
-    ///   - serializeCallback: 
+    ///   - serializeCallback:
     public init(_ keyPath: String?, mapToObject object: T? = nil, context: MapContext? = nil,
                 emptyResponseCodes: Set<Int> = MappableResponseSerializer.defaultEmptyResponseCodes,
                 emptyRequestMethods: Set<HTTPMethod> = MappableResponseSerializer.defaultEmptyRequestMethods, serializeCallback: @escaping (URLRequest?,HTTPURLResponse?, Data?,Error?) throws -> T) {
-
+        
         self.emptyResponseCodes = emptyResponseCodes
         self.emptyRequestMethods = emptyRequestMethods
         
@@ -269,7 +269,7 @@ public final class MappableArrayResponseSerializer<T: BaseMappable>: ResponseSer
     
     public let keyPath: String?
     public let context: MapContext?
-
+    
     public let serializeCallback: (URLRequest?,HTTPURLResponse?, Data?,Error?) throws -> [T]
     /// Creates an instance using the values provided.
     ///
