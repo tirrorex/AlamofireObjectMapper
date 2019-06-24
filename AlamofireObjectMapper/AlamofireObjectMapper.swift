@@ -95,7 +95,7 @@ extension DataRequest {
             }
             
             let failureReason = "ObjectMapper failed to serialize response."
-            throw AFError.responseSerializationFailed(reason: .decodingFailed(error: newError(.dataSerializationFailed, failureReason: failureReason)))
+            throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: newError(.dataSerializationFailed, failureReason: failureReason)))
             
         })
     }
@@ -130,12 +130,12 @@ extension DataRequest {
      */
     @discardableResult
     public func responseObject<T: BaseMappable>(queue: DispatchQueue? = .main, keyPath: String? = nil, mapToObject object: T? = nil, context: MapContext? = nil, completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
-        return response(queue: queue, responseSerializer: DataRequest.ObjectMapperSerializer(keyPath, mapToObject: object, context: context), completionHandler: completionHandler)
+        return response(queue: queue!, responseSerializer: DataRequest.ObjectMapperSerializer(keyPath, mapToObject: object, context: context), completionHandler: completionHandler)
     }
     
     @discardableResult
     public func responseObject<T: ImmutableMappable>(queue: DispatchQueue? = .main, keyPath: String? = nil, mapToObject object: T? = nil, context: MapContext? = nil, completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
-        return response(queue: queue, responseSerializer: DataRequest.ObjectMapperImmutableSerializer(keyPath, context: context), completionHandler: completionHandler)
+        return response(queue: queue!, responseSerializer: DataRequest.ObjectMapperImmutableSerializer(keyPath, context: context), completionHandler: completionHandler)
     }
     
     /// BaseMappable Array Serializer
@@ -186,7 +186,7 @@ extension DataRequest {
      */
     @discardableResult
     public func responseArray<T: BaseMappable>(queue: DispatchQueue? = .main, keyPath: String? = nil, context: MapContext? = nil, completionHandler: @escaping (DataResponse<[T]>) -> Void) -> Self {
-        return response(queue: queue, responseSerializer: DataRequest.ObjectMapperArraySerializer(keyPath, context: context), completionHandler: completionHandler)
+        return response(queue: queue!, responseSerializer: DataRequest.ObjectMapperArraySerializer(keyPath, context: context), completionHandler: completionHandler)
     }
     
     /**
@@ -200,7 +200,7 @@ extension DataRequest {
      */
     @discardableResult
     public func responseArray<T: ImmutableMappable>(queue: DispatchQueue? = .main, keyPath: String? = nil, context: MapContext? = nil, completionHandler: @escaping (DataResponse<[T]>) -> Void) -> Self {
-        return response(queue: queue, responseSerializer: DataRequest.ObjectMapperImmutableArraySerializer(keyPath, context: context), completionHandler: completionHandler)
+        return response(queue: queue!, responseSerializer: DataRequest.ObjectMapperImmutableArraySerializer(keyPath, context: context), completionHandler: completionHandler)
     }
 }
 
